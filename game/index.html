@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Mücevher Avı</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Lets main.js say `import * as THREE from "three"`. Three.js 0.186.1 (MIT) is kept in lib/
+       because games may not load files from other sites. -->
+  <script type="importmap">
+    { "imports": { "three": "./lib/three.module.js" } }
+  </script>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <div id="hud"><span id="score"></span><span id="time"></span></div>
+  <div id="message"></div>
+  <!-- oyun-sdk.js must load before your game code / oyun kodundan önce yüklenmeli -->
+  <script src="oyun-sdk.js"></script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "slug": "mucevher-avi",
+  "title": { "tr": "Mücevher Avı", "en": "Gem Hunt" },
+  "description": {
+    "tr": "30 saniyede dönen mücevherleri topla, kırmızı kayalardan uzak dur.",
+    "en": "Collect the spinning gems in 30 seconds and keep away from the red rocks."
+  },
+  "author": "takma-adin",
+  "category": "arcade",
+  "orientation": "portrait",
+  "scores": true,
+  "languages": ["tr", "en"],
+  "thumbnail": "thumbnail.svg",
+  "dir": "game"
+}

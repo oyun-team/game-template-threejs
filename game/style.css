@@ -1,0 +1,25 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #1b1730;
+  color: #fff;
+  font: 700 18px system-ui, sans-serif;
+  touch-action: none;          /* stop the page from scrolling or zooming while playing */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+canvas { display: block; width: 100vw; height: 100dvh; }
+/* Text is plain HTML on top of the 3D canvas: easier than drawing text in 3D. */
+#hud {
+  position: fixed; top: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between;
+  padding: 14px 16px; pointer-events: none;
+}
+#message {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; white-space: pre-line; font-size: 24px; line-height: 1.4;
+  pointer-events: none; text-shadow: 0 2px 8px #0008;
+}
