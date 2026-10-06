@@ -11,5 +11,15 @@
   "scores": true,
   "languages": ["tr", "en"],
   "thumbnail": "thumbnail.svg",
+  "age": 7,
+  "audience": {
+    "tr": "3B oyunları seven, kısa bir tur isteyen oyuncular için.",
+    "en": "Players who like 3D games and want a quick round."
+  },
+  "benefits": {
+    "tr": "Üç boyutlu düşünmeyi ve hızlı karar vermeyi çalıştırır.",
+    "en": "Practises thinking in 3D and deciding quickly."
+  },
+  "skills": ["spatial", "reflexes", "focus"],
   "dir": "game"
 }
