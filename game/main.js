@@ -48,6 +48,10 @@ let things = [];
 let score = 0;
 let timeLeft = ROUND_SECONDS;
 let spawnTimer = 0;
+// For the parent's progress view (game.json "measures"): a game clock that stops while paused,
+// and what happened to each red rock.
+let clock = 0;
+let rocks = { hit: 0, avoided: 0 };
 
 function showMessage(text) { $("message").textContent = text; }
 function updateHud() {
@@ -66,7 +70,7 @@ function spawn() {
   const mesh = new THREE.Mesh(rock ? ROCK : GEM, rock ? ROCK_MATERIAL : GEM_COLORS[Math.floor(Math.random() * GEM_COLORS.length)]);
   const { w, h } = viewSize();
   mesh.position.set((Math.random() - 0.5) * (w - 2), -h / 2 - 1, (Math.random() - 0.5) * 4);
-  mesh.userData = { rock, speed: 2 + Math.random() * 2 + (ROUND_SECONDS - timeLeft) * 0.08, spin: 1 + Math.random() * 3 };
+  mesh.userData = { rock, seenAt: null, speed: 2 + Math.random() * 2 + (ROUND_SECONDS - timeLeft) * 0.08, spin: 1 + Math.random() * 3 };
   scene.add(mesh);
   things.push(mesh);
 }
@@ -82,6 +86,7 @@ function startRound() {
   score = 0;
   timeLeft = ROUND_SECONDS;
   spawnTimer = 0;
+  rocks = { hit: 0, avoided: 0 };
   state = "playing";
   showMessage("");
   updateHud();
@@ -89,6 +94,9 @@ function startRound() {
 
 async function endRound() {
   state = "over";
+  // Measure: share of red rocks left alone. A round with very few rocks says little.
+  const allRocks = rocks.hit + rocks.avoided;
+  if (allRocks >= 3) OyunSDK.measure("rock_avoid", (rocks.avoided / allRocks) * 100);
   showMessage(`${t.over}\n${t.score}: ${score}\n\n${t.again}`);
   try {
     const result = await OyunSDK.submitScore(score);
@@ -112,10 +120,13 @@ canvas.addEventListener("pointerdown", (e) => {
   if (!hit) return;
   const mesh = hit.object;
   if (mesh.userData.rock) {
+    rocks.hit++;
     score = Math.max(0, score - 3);
     timeLeft = Math.max(0, timeLeft - 3);
   } else {
     score++;
+    // Measure: one try = time from the gem being fully on screen to tapping it.
+    if (mesh.userData.seenAt !== null) OyunSDK.measure("reaction_ms", (clock - mesh.userData.seenAt) * 1000);
   }
   removeThing(mesh);
   updateHud();
@@ -127,6 +138,7 @@ OyunSDK.onResume(() => (paused = false));
 
 function update(dt) {
   if (state !== "playing" || paused) return;
+  clock += dt;
   timeLeft -= dt;
   if (timeLeft <= 0) {
     timeLeft = 0;
@@ -140,11 +152,16 @@ function update(dt) {
     spawnTimer = 0.5 + Math.random() * 0.4;
   }
   const top = viewSize().h / 2 + 1.5;
+  const bottom = -viewSize().h / 2 + 0.8;
   for (const m of things.slice()) {
     m.position.y += m.userData.speed * dt;
+    if (m.userData.seenAt === null && m.position.y >= bottom) m.userData.seenAt = clock;
     m.rotation.x += m.userData.spin * dt;
     m.rotation.y += m.userData.spin * 0.7 * dt;
-    if (m.position.y > top) removeThing(m);
+    if (m.position.y > top) {
+      if (m.userData.rock) rocks.avoided++;
+      removeThing(m);
+    }
   }
   updateHud();
 }
