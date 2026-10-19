@@ -96,7 +96,7 @@ async function endRound() {
   state = "over";
   // Measure: share of red rocks left alone. A round with very few rocks says little.
   const allRocks = rocks.hit + rocks.avoided;
-  if (allRocks >= 3) OyunSDK.measure("rock_avoid", (rocks.avoided / allRocks) * 100);
+  if (allRocks >= 3) OyunSDK.measure("avoid_rate", (rocks.avoided / allRocks) * 100);
   showMessage(`${t.over}\n${t.score}: ${score}\n\n${t.again}`);
   try {
     const result = await OyunSDK.submitScore(score);
