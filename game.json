@@ -21,5 +21,9 @@
     "en": "Practises thinking in 3D and deciding quickly."
   },
   "skills": ["spatial", "reflexes", "focus"],
+  "measures": [
+    { "id": "reaction_ms", "skill": "reflexes", "unit": "ms", "better": "lower", "label": { "tr": "Tepki süresi", "en": "Reaction time" } },
+    { "id": "rock_avoid", "skill": "focus", "unit": "percent", "better": "higher", "label": { "tr": "Dokunulmayan kaya", "en": "Rocks left alone" } }
+  ],
   "dir": "game"
 }
